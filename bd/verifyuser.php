@@ -16,7 +16,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 
     // Preparar y ejecutar la consulta
-    $sql = "SELECT id_usuario, nombreusu, contrasena, es_admin FROM usuarios WHERE nombreusu = ?";
+    $sql = "SELECT id_usuario, nombreusu, contrasena, es_admin, sucursal_asignada, nombre_persona FROM usuarios WHERE nombreusu = ?";
     $stmt = $conex->prepare($sql);
 
     // Verificar la preparación de la consulta
@@ -26,7 +26,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     $stmt->bind_param("s", $usu);
     $stmt->execute();
-    $stmt->bind_result($id_usuario, $nombreusu, $hashedPassword, $es_admin);
+    $stmt->bind_result($id_usuario, $nombreusu, $hashedPassword, $es_admin, $sucursal, $nombre_perosona);
     $stmt->fetch();
 
     // Verificar la contraseña
@@ -35,12 +35,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $_SESSION['id_usuario'] = $id_usuario;
         $_SESSION['nombreusu'] = $nombreusu;
         $_SESSION['es_admin'] = $es_admin;
+        $_SESSION['sucursal_asignada'] = $sucursal;
+        $_SESSION['nombre_persona'] = $nombre_perosona;
 
         // Redirigir a la página correspondiente
         if ($es_admin) {
             header("Location: ../panel_administrador/inicio.php"); // Redirigir al panel de administrador
         } else {
-            header("Location: ../home/home.php"); // Redirigir al panel de usuario
+            header("Location: ../vendedor/caja_vendedor.php"); // Redirigir al panel de usuario
         }
         exit();
     } else {

@@ -10,6 +10,8 @@
         // Verificar si el usuario está autenticado y obtener los valores de la sesión
         $es_admin = $_SESSION['es_admin'] ?? 0;
         $nombreu = $_SESSION['nombreusu'];
+        $sucursal = $_SESSION['sucursal_asignada'];
+        $nombre_persona = $_SESSION['nombre_persona'];
 
         // Consulta para obtener productos
         $query = "SELECT p.id_producto, p.nombre, p.descripcion, p.precio, p.cantidad_en_stock, p.imagen, c.nombre AS categoria 

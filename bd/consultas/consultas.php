@@ -25,13 +25,21 @@ $sqlTotalDineroVendido = "SELECT SUM(total) AS total_dinero_vendido FROM ventas;
 $resultTotalDineroVendido = $conn->query($sqlTotalDineroVendido);
 $total_dinero_vendido = $resultTotalDineroVendido->fetch_assoc()['total_dinero_vendido'];
 
-// Consulta para obtener el total de dinero vendido en el mes actual
-$sqlTotalDineroVendidoMes = "SELECT SUM(total) AS total_dinero_vendido_mes 
-                             FROM ventas 
-                             WHERE MONTH(fecha_venta) = MONTH(CURRENT_DATE) 
-                             AND YEAR(fecha_venta) = YEAR(CURRENT_DATE);";
+// Consulta para obtener el total de dinero vendido desde el último retiro en el mes actual
+$sqlTotalDineroVendidoMes = "
+    SELECT SUM(total) AS total_dinero_vendido_mes 
+    FROM ventas 
+    WHERE fecha_venta >= (
+        SELECT IFNULL(MAX(fecha), '1970-01-01') 
+        FROM retiros
+    ) 
+    AND MONTH(fecha_venta) = MONTH(CURRENT_DATE) 
+    AND YEAR(fecha_venta) = YEAR(CURRENT_DATE);
+";
+
 $resultTotalDineroVendidoMes = $conn->query($sqlTotalDineroVendidoMes);
 $total_dinero_vendido_mes = $resultTotalDineroVendidoMes->fetch_assoc()['total_dinero_vendido_mes'];
+
 
 // Consulta para obtener el total de dinero vendido hoy
 $sqlTotalDineroVendidoHoy = "SELECT SUM(total) AS total_dinero_vendido_hoy 
@@ -137,4 +145,23 @@ $resultadoCaja = $conn->query($consultaCaja);
 // Venta Mayor
 $consultaVentaMayor = "SELECT fecha_venta, total FROM ventas ORDER BY total DESC LIMIT 1";
 $resultadoVentaMayor = $conn->query($consultaVentaMayor);
+
+// Consultar el total vendido desde el último retiro
+$queryVentas = "SELECT IFNULL(SUM(total), 0) AS total_vendido 
+                FROM ventas 
+                WHERE fecha_venta >= (SELECT IFNULL(MAX(fecha), '1970-01-01') FROM retiros)";
+$resultVentas2 = $conn->query($queryVentas);
+$totalVendido = $resultVentas2->fetch_assoc()['total_vendido'];
+
+// Consultar retiros anteriores
+$queryRetiros = "SELECT IFNULL(SUM(monto), 0) AS total_retiros FROM retiros";
+$resultRetiros = $conn->query($queryRetiros);
+$totalRetiros = $resultRetiros->fetch_assoc()['total_retiros'];
+
+$query = "SELECT r.id, r.monto, r.fecha, u.nombreusu AS nombreusu, r.observaciones
+          FROM retiros r
+          JOIN usuarios u ON r.id_usuario = u.id_usuario
+          ORDER BY r.fecha DESC";
+
+$resultadoRetiros = $conn->query($query);
 ?>

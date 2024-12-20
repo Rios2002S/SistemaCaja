@@ -34,17 +34,16 @@
                 </div>
             </div>
 
-            <!-- Producto Más Barato -->
+            <!-- Corte de caja -->
             <div class="col">
                 <div class="card shadow-sm">
                     <div class="card-body text-center">
-                        <h5 class="card-title">Producto Más Barato</h5>
-                        <p class="fw-bold"><?= $producto_mas_barato['nombre'] ?></p>
-                        <p>Precio: $<?= number_format($producto_mas_barato['precio'], 2) ?></p>
+                        <h5 class="card-title"><i class="fa fa-money-bill"></i>Corte de Caja</h5>
+                        <!-- Botón para ver todas las ventas -->
+                        <a href="corte.php" class="btn btn-warning">Hacer Corte</a>
                     </div>
                 </div>
             </div>
-            
             <!-- Total Dinero Vendido Hoy -->
             <div class="col">
                 <div class="card shadow-sm">
@@ -52,7 +51,7 @@
                         <h5 class="card-title"><i class="fa fa-calendar-day"></i> Vendido (Hoy)</h5>
                         <p class="display-6">
                             <?php if ($total_dinero_vendido_hoy == 0): ?>
-                                Ninguna
+                                0.00
                             <?php else: ?>
                                 $<?= number_format($total_dinero_vendido_hoy, 2) ?>
                             <?php endif; ?>
@@ -66,7 +65,13 @@
                 <div class="card shadow-sm">
                     <div class="card-body text-center">
                         <h5 class="card-title"><i class="fa fa-calendar-alt"></i> Vendido (Este Mes)</h5>
-                        <p class="display-6">$<?= number_format($total_dinero_vendido_mes, 2) ?></p>
+                        <p class="display-6">
+                        <?php if ($total_dinero_vendido_hoy == 0): ?>
+                                0.00
+                            <?php else: ?>
+                                $<?= number_format($total_dinero_vendido_mes, 2) ?>
+                            <?php endif; ?>
+                            </p>
                     </div>
                 </div>
             </div>
@@ -76,7 +81,7 @@
                 <div class="card shadow-sm">
                     <div class="card-body text-center">
                         <h5 class="card-title"><i class="fa fa-money-bill"></i> Total Dinero Vendido</h5>
-                        <p class="display-6">$<?= number_format($total_dinero_vendido, 2) ?></p>
+                        <p class="display-6">$<?= number_format($totalVendido, 2); ?></p>
                     </div>
                 </div>
             </div>

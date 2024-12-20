@@ -2,7 +2,11 @@
 ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
-
+// Si no es administrador, redirigirlo a una página de acceso denegado
+if ($es_admin != 1) {
+    header("Location: ../vendedor/no_acceso.php"); // Puedes cambiar la URL según tu necesidad
+    exit();
+}
 require_once '../headfooter/head.php';
 require_once '../bd/consultas/consultas.php';
 require_once '../add/tarjetas.php';

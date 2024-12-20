@@ -112,7 +112,7 @@
 		<input type="password" name="contrasena" id="password" class="password" />
 	</div>
 	<div class="inputGroup inputGroup3">
-		<button name="ingresar" id="login">Log in</button>
+		<button name="ingresar" id="login">Iniciar Sesion</button>
 	</div>	
 </form>
   <script src='https://cdnjs.cloudflare.com/ajax/libs/gsap/1.20.3/TweenMax.min.js'></script>
