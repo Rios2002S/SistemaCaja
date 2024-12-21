@@ -1,11 +1,11 @@
 <?php
+require_once '../headfooter/head.php'; // Conexión y sesión
+require_once '../bd/consultas/consultas.php'; 
 // Si no es administrador, redirigirlo a una página de acceso denegado
 if ($es_admin != 1) {
     header("Location: ../vendedor/no_acceso.php"); // Puedes cambiar la URL según tu necesidad
     exit();
 }
-require_once '../headfooter/head.php'; // Conexión y sesión
-require_once '../bd/consultas/consultas.php'; 
 ?>
 <?php if (isset($_GET['success'])): ?>
     <div class="alert alert-success text-center" role="alert">

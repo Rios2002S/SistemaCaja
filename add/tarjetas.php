@@ -66,7 +66,7 @@
                     <div class="card-body text-center">
                         <h5 class="card-title"><i class="fa fa-calendar-alt"></i> Vendido (Este Mes)</h5>
                         <p class="display-6">
-                        <?php if ($total_dinero_vendido_hoy == 0): ?>
+                        <?php if ($total_dinero_vendido_mes == 0): ?>
                                 0.00
                             <?php else: ?>
                                 $<?= number_format($total_dinero_vendido_mes, 2) ?>
