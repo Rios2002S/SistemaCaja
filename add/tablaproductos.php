@@ -2,7 +2,7 @@
 <div class="table-responsive">    
     <table id="tablaProductos" class="display">
         <thead>
-            <tr>
+            <tr id="producto<?= $row['id_producto'] ?>">
                 <th>Imagen</th>
                 <th>Nombre</th>
                 <th>Descripción</th>
@@ -14,7 +14,7 @@
         </thead>
         <tbody>
             <?php while ($row = $resultInventario->fetch_assoc()) { ?>
-                <tr>
+                <tr id="producto<?= $row['id_producto'] ?>"> <!-- Añadir id único a cada fila -->
                     <td>
                         <?php if ($row['imagen']) { ?>
                             <img src="<?= $row['imagen'] ?>" alt="<?= $row['nombre'] ?>" style="height: 50px; object-fit: cover;">
@@ -103,14 +103,61 @@
 </div>  
 <script>
     $(document).ready(function () {
-        $('#tablaProductos').DataTable({
+        // Inicializamos la tabla
+        var table = $('#tablaProductos').DataTable({
             "paging": true,
             "searching": true,
             "ordering": true,
-            "lengthMenu": [5, 10, 20, 50],
+            "lengthMenu": [10, 20, 30, 50],
             "language": {
                 "url": "https://cdn.datatables.net/plug-ins/1.13.6/i18n/Spanish.json"
             }
         });
+
+        // Almacenar la página actual en sessionStorage
+        var currentPage = table.page();
+        sessionStorage.setItem('currentPage', currentPage);
+
+        // Obtener el fragmento de la URL (por ejemplo, #producto123)
+        var hash = window.location.hash;
+
+        // Comprobamos si el hash está presente y es válido
+        if (hash.startsWith('#producto')) {
+            var id_producto = hash.substring(9); // Obtener solo el ID del producto
+
+            // Buscar la fila en la tabla con el id correspondiente
+            var fila = $('#tablaProductos').find('tr#producto' + id_producto);
+
+            // Si encontramos la fila, resaltar la fila y ajustar la página
+            if (fila.length) {
+                // Resaltar la fila
+                fila.css('background-color', '#ffeb3b');
+
+                // Recuperamos la página guardada
+                var savedPage = sessionStorage.getItem('currentPage');
+
+                // Verificamos si la página guardada es válida y dentro del rango
+                if (savedPage !== null && !isNaN(savedPage)) {
+                    var totalPages = table.page.info().pages; // Número total de páginas
+                    savedPage = parseInt(savedPage); // Asegurarnos de que sea un número entero
+
+                    if (savedPage >= 0 && savedPage < totalPages) {
+                        // Cambiar a la página guardada si es válida
+                        table.page(savedPage).draw('page');
+                    } else {
+                        // Si la página guardada no es válida, cambiar a la primera página
+                        table.page(0).draw('page');
+                    }
+                } else {
+                    // Si no hay página guardada, cambiar a la primera página
+                    table.page(0).draw('page');
+                }
+
+                // Desplazar la página para mostrar la fila
+                $('html, body').animate({
+                    scrollTop: fila.offset().top - 100
+                }, 500);
+            }
+        }
     });
 </script>
